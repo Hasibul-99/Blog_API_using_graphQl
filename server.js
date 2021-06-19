@@ -4,9 +4,12 @@ const app = express();
 const {connectDB} = require('./db');
 const { graphqlHTTP } = require('express-graphql');
 const schema = require('./graphql/schema');
+const { authenticate } = require("./middleware/auth");
 
 dotenv.config();
 connectDB();
+
+app.use(authenticate);
 
 app.get('/', (req, res) => {
     res.json({msg: 'Welcome to Graphql Blog'})
