@@ -20,6 +20,19 @@ login(email: "hasibul@gmail.com", password: "123456")
    body
 }
 
+## Add Comment
+addComment(comment: "First comment", postId: "60e7cd190800644fe063afc4"){
+    comment,
+    post{
+      id
+      title
+    }
+    user{
+      id
+      username
+    }
+}
+
 
 ### query
 

@@ -1,6 +1,6 @@
-const { UserType, PostType } = require('./types');
+const { UserType, PostType, CommentType } = require('./types');
 
-const {Post, User} = require('../models');
+const {Post, User, Comment} = require('../models');
 const { GraphQLString } = require('graphql');
 const {createJwtToken} = require("../util/auth");
 
@@ -66,6 +66,28 @@ const addPost = {
   
       return post.save()
     },
-  }
+}
 
-module.exports = {register, login, addPost};
+const addComment = {
+    type: CommentType, 
+    description: "create new comment on the blog post",
+    args: {
+        comment: {type: GraphQLString},
+        postId: {type: GraphQLString}
+    },
+    resolve (parent, args, {verifiedUser}) {
+        if (!verifiedUser) {
+            throw new Error("Unautherized")
+        }
+
+        const comment = new Comment({
+            comment: args.comment,
+            postId: args.postId,
+            userId: verifiedUser._id
+        });
+
+        return comment.save();
+    }
+}
+
+module.exports = {register, login, addPost, addComment};
