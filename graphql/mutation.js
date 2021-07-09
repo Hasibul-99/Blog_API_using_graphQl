@@ -68,6 +68,65 @@ const addPost = {
     },
 }
 
+const updatePost = {
+    type: PostType,
+    description: "Update blog post",
+    args: {
+      id: { type: GraphQLString },
+      title: { type: GraphQLString },
+      body: { type: GraphQLString },
+    },
+    async resolve(parent, args, { verifiedUser }) {
+      if (!verifiedUser) {
+        throw new Error("Unauthenticated")
+      }
+
+      console.log("verifiedUser", verifiedUser);
+
+      const postUpdated = await Post.findOneAndUpdate(
+        {
+          _id: args.id,
+          authId: verifiedUser._id,
+        },
+        { title: args.title, body: args.body },
+        {
+          new: true,
+          runValidators: true,
+        }
+      )
+  
+      if (!postUpdated) {
+        throw new Error("No post with the given ID found for the author")
+      }
+  
+      return postUpdated
+    },
+}
+
+const deletePost = {
+    type: GraphQLString,
+    description: "Delete post",
+    args: {
+      postId: { type: GraphQLString },
+    },
+    async resolve(parent, args, { verifiedUser }) {
+      console.log(verifiedUser)
+      if (!verifiedUser) {
+        throw new Error("Unauthenticated")
+      }
+      const postDeleted = await Post.findOneAndDelete({
+        _id: args.postId,
+        authId: verifiedUser._id,
+      })
+      if (!postDeleted) {
+        throw new Error("No post with the given ID found for the author")
+      }
+  
+      return "Post deleted"
+    },
+}
+  
+
 const addComment = {
     type: CommentType, 
     description: "create new comment on the blog post",
@@ -90,4 +149,4 @@ const addComment = {
     }
 }
 
-module.exports = {register, login, addPost, addComment};
+module.exports = {register, login, addPost, updatePost, deletePost, addComment};

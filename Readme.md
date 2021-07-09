@@ -20,6 +20,12 @@ login(email: "hasibul@gmail.com", password: "123456")
    body
 }
 
+## Update post
+updatePost(id: "60e7cd190800644fe063afc4", title: "Title 12",  body: "heLLo world ") {
+    body
+    id
+  }
+
 ## Add Comment
 addComment(comment: "First comment", postId: "60e7cd190800644fe063afc4"){
     comment,
@@ -57,4 +63,27 @@ posts {
 post(id: "60e7cd190800644fe063afc4") {
     id,
     title
+}
+
+## Comment
+	
+comments{
+  id
+  comment
+  post{
+    id
+    title
+  }
+  user{
+    id
+    username
+  }
+}
+  
+comment(id: "60e85b5b07170a38807af6f1") {
+  id
+  comment
+  user{
+    id
+  }
 }
