@@ -6,8 +6,8 @@ const authenticate = async (req, res, next) => {
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
         // const decode = jwr.decode(token, process.env.JWT_SECRET);
-        req.verifiedUser = verified;
-        console.log("verified success!", verified);
+        req.verifiedUser = verified.user;
+        console.log("verified success!",);
         next(); 
     } catch (error) {
         console.log("verification faield",);
